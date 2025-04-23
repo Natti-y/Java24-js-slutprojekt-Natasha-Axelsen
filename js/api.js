@@ -1,3 +1,7 @@
+// innehåller funktioner för att hämta topprankade filmer, populära filmer, trailers mm. samt göra sökningar
+// alla API-anrop returnerar ett urval av resultat och använder svenska som språk.
+
+
 const API_KEY = '3ef83f8fea2e17b7eff7d4be9c577f7c';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMG_URL = 'https://image.tmdb.org/t/p/w500';
@@ -14,6 +18,7 @@ export async function fetchPopular() {
   return data.results.slice(0, 10);
 }
 
+// Använder TMDB:s "multi search"-endpoint för att hämta både filmer och personer
 export async function searchMulti(query) {
   const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&language=sv-SE&query=${encodeURIComponent(query)}`);
   const data = await res.json();
@@ -26,8 +31,7 @@ export async function searchMulti(query) {
 
 export { IMG_URL };
 
-//Extra funktion (Trailer?)
-//Måste hämta extra data med movieID samt kontrollera om den finns på yt
+//hämtar extra data med movieID samt kontrollerar om den finns på yt
 export async function fetchMovieTrailer(movieId) {
     const res = await fetch(`${BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}`);
     const data = await res.json();

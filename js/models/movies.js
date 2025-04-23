@@ -1,3 +1,7 @@
+// representerar en film med egenskaper som titel, poster, releasedatum, betyg och popularitet.
+// innehåller privata fält, getters för att komma åt datan på ett säkert sätt,
+// samt logik för att skapa en fullständig URL till filmens posterbild.
+
 export class Movie {
     #id;
     #title;

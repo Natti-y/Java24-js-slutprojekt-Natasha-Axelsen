@@ -1,3 +1,7 @@
+//Renderar filmer och personer från API:n 
+//inklusive information som trailer-länk, betyg, popularitet och detaljer om filmer i en modal  
+//hanterar användarinteraktioner för att visa ytterligare information
+
 import { IMG_URL, fetchMovieTrailer, fetchMovieDetails } from '../api.js';
 
 const results = document.getElementById('results');
