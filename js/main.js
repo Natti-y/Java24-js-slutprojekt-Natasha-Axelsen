@@ -1,65 +1,79 @@
-// Importerar funktioner
+// hanterar interaktioner i ett film- och person-sökningsgränssnitt.
+// hämtar och visar topprankade eller populära filmer, hanterar sökningar efter filmer och personer,
+// sorterar resultaten baserat på titel eller popularitet i stigande eller fallande ordning.
+
+
 import { fetchTopRated, fetchPopular, searchMulti } from './api.js';
 import { renderMovies, renderPersons } from './ui/render.js';
 
-// Importerar klasser
+
 import { Movie } from './models/movies.js';
 import { Person } from './models/person.js';
 
-// Importerar sorteringsfunktion
 import { sortItems } from './ui/sort.js';
 
-// HTML-element
 const topRatedBtn = document.getElementById('btn-top-rated');
 const popularBtn = document.getElementById('btn-popular');
 const searchForm = document.getElementById('search-form');
 const results = document.getElementById('results');
 
-// För sortering
 let currentData = [];
+
 
 // Topprankade filmer
 topRatedBtn.addEventListener('click', async () => {
-  const movies = await fetchTopRated();
-  currentData = movies.map(m => new Movie(m));
-  renderMovies(currentData);
+  try {
+    const movies = await fetchTopRated();
+    currentData = movies.map(m => new Movie(m));
+    renderMovies(currentData);
+  } catch (error) {
+    console.error(error);
+    results.innerHTML = '<p>Kunde inte hämta topprankade filmer. Försök igen senare.</p>';
+  }
 });
 
 // Populära filmer
 popularBtn.addEventListener('click', async () => {
-  const movies = await fetchPopular();
-  currentData = movies.map(m => new Movie(m));
-  renderMovies(currentData);
+  try {
+    const movies = await fetchPopular();
+    currentData = movies.map(m => new Movie(m));
+    renderMovies(currentData);
+  } catch (error) {
+    console.error(error);
+    results.innerHTML = '<p>Kunde inte hämta populära filmer. Försök igen senare.</p>';
+  }
 });
 
 // Söker efter film/person
 searchForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const query = document.getElementById('search-input').value.trim();
-
   if (!query) return;
 
-  const { movies, persons } = await searchMulti(query);
+  try {
+    const { movies, persons } = await searchMulti(query);
+    results.innerHTML = '';
 
-  results.innerHTML = '';
+    if (movies.length > 0) {
+      currentData = movies.map(m => new Movie(m));
+      renderMovies(currentData);
+    }
 
-  if (movies.length > 0) {
-    currentData = movies.map(m => new Movie(m));
-    renderMovies(currentData);
-  }
+    if (persons.length > 0) {
+      currentData = persons.map(p => new Person(p));
+      renderPersons(currentData);
+    }
 
-  if (persons.length > 0) {
-    currentData = persons.map(p => new Person(p));
-    renderPersons(currentData);
-  }
-
-  //Meddelande ifall sökningen inte ger några resultat
-  if (movies.length === 0 && persons.length === 0) {
-    results.innerHTML = '<p>Inga resultat hittades.</p>';
+    //ifall det inte finns något resultat
+    if (movies.length === 0 && persons.length === 0) {
+      results.innerHTML = '<p>Inga resultat hittades.</p>';
+    }
+  } catch (error) {
+    console.error(error);
+    results.innerHTML = '<p>Ett fel uppstod vid sökningen. Kontrollera din internetanslutning eller försök igen senare.</p>';
   }
 });
 
-// Sorteringsfunktion
 function applySort(type, order) {
   const sorted = sortItems(currentData, type, order);
   if (sorted[0]?.title) {

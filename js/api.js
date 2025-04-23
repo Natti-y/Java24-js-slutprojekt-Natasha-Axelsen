@@ -35,3 +35,9 @@ export async function fetchMovieTrailer(movieId) {
     return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
   }
   
+  export async function fetchMovieDetails(id) {
+    const res = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=sv-SE`);
+    const data = await res.json();
+    return data;
+  }
+  

@@ -1,3 +1,5 @@
+// Sorterar en lista med objekt baserat på titel/namn eller popularitet 
+// i stigande eller fallande ordning
 export function sortItems(items, type = 'title', order = 'asc') {
     const sorted = [...items];
     if (type === 'title' || type === 'name') {
