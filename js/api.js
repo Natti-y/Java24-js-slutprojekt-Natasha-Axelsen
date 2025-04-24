@@ -36,6 +36,7 @@ export async function fetchMovieTrailer(movieId) {
     const res = await fetch(`${BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}`);
     const data = await res.json();
     const trailer = data.results.find(video => video.type === 'Trailer' && video.site === 'YouTube');
+    //Fallback
     return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
   }
   

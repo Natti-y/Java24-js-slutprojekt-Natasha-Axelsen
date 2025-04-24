@@ -13,6 +13,8 @@ export async function renderMovies(movies) {
   
     for (const movie of movies) {
       // Kontrollera att filmen har ett giltigt ID
+      //film saknade ID eller trailern inte fanns, försökte koden ändå hämta data
+      // vilket ledde till 404-fel eller kraschade find()
       if (!movie.id) {
         console.warn('Film saknar ID, hoppar över trailerhämtning.');
         continue;
